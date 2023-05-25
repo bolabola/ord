@@ -15,6 +15,7 @@ const PROTOCOL_ID: &[u8] = b"ord";
 
 const BODY_TAG: &[u8] = &[];
 const CONTENT_TYPE_TAG: &[u8] = &[1];
+const CURSED_TAG: &[u8] = &[66];
 
 #[derive(Debug, PartialEq, Clone)]
 pub(crate) struct Inscription {
@@ -63,7 +64,11 @@ impl Inscription {
         .push_slice(CONTENT_TYPE_TAG)
         .push_slice(content_type);
     }
-
+      log::info!("Appending cursed tag");
+      builder = builder
+        .push_slice(CURSED_TAG)
+        .push_slice("cursed".as_bytes());
+    
     if let Some(body) = &self.body {
       builder = builder.push_slice(BODY_TAG);
       for chunk in body.chunks(520) {
